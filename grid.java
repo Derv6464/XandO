@@ -10,16 +10,15 @@ public class grid {
             }
         }
 
-        while(true){
-            if(checkWin(arr,turn)){
-                if(turn == true){
-                    System.out.println("Player 1 wins");
-                }
-                else{
-                    System.out.println("Player 2 wins");
-                }
-            }
+        while(!checkWin(arr,turn)){
             turn = makeMove(turn,arr);
+        }
+        updateGrid(arr);
+        if(!turn){
+            System.out.println("Player 1 wins");
+        }
+        else{
+            System.out.println("Player 2 wins");
         }
         
     }
@@ -43,6 +42,7 @@ public class grid {
         System.out.println("C   "+ arr[2][0] +" | "+ arr[2][1] +" | "+ arr[2][2] +" ");
         System.out.println("    1   2   3");
        // System.out.println("");
+
     }
     static boolean makeMove(boolean turn, String[][] arr){
         java.util.Scanner in = new Scanner(System.in);
@@ -61,7 +61,6 @@ public class grid {
         }else{
             s = "O";
         }
-        
         if (checkDiagnol(arr, s)||checkHorizontal(arr, s)||checkVertical(arr, s)){
             return true;
         }else{
