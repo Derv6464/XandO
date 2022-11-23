@@ -12,16 +12,15 @@ public class grid {
             }
         }
 
-        while(true){
-            if(checkWin(arr,turn)){
-                if(turn == true){
-                    System.out.println("Player 1 wins");
-                }
-                else{
-                    System.out.println("Player 2 wins");
-                }
-            }
+        while(!checkWin(arr,turn)){
             turn = makeMove(turn,arr);
+        }
+        updateGrid(arr);
+        if(!turn){
+            System.out.println("Player 1 wins");
+        }
+        else{
+            System.out.println("Player 2 wins");
         }
         
     }
@@ -38,11 +37,13 @@ public class grid {
     }
 
     static void updateGrid(String[][] arr){
-        System.out.println(" "+ arr[0][0] +" | "+ arr[0][1] +" | "+ arr[0][2] +" ");
-        System.out.println("------------");
-        System.out.println(" "+ arr[1][0] +" | "+ arr[1][1] +" | "+ arr[1][2] +" ");
-        System.out.println("------------");
-        System.out.println(" "+ arr[2][0] +" | "+ arr[2][1] +" | "+ arr[2][2] +" ");
+        System.out.println("A   "+ arr[0][0] +" | "+ arr[0][1] +" | "+ arr[0][2] +" ");
+        System.out.println("   ------------");
+        System.out.println("B   "+ arr[1][0] +" | "+ arr[1][1] +" | "+ arr[1][2] +" ");
+        System.out.println("   ------------");
+        System.out.println("C   "+ arr[2][0] +" | "+ arr[2][1] +" | "+ arr[2][2] +" ");
+        System.out.println("    1   2   3");
+       // System.out.println("");
 
     }
     static boolean makeMove(boolean turn, String[][] arr){
@@ -74,7 +75,6 @@ public class grid {
         }else{
             s = "O";
         }
-
         if (checkDiagnol(arr, s)||checkHorizontal(arr, s)||checkVertical(arr, s)){
             return true;
         }else{
