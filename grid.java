@@ -5,6 +5,8 @@ public class grid {
 
     public static void main(String[] args){
         boolean turn = true;
+        int p1Score = 0;
+        int p2Score = 0;
         String[][] arr = new String[3][3];
         for(int i = 0;i<arr.length;i++){
             for(int j = 0;j<arr.length;j++){
@@ -18,9 +20,11 @@ public class grid {
         updateGrid(arr);
         if(!turn){
             System.out.println("Player 1 wins");
+            System.out.println(scoreCounter(true,p1Score,p2Score));
         }
         else{
             System.out.println("Player 2 wins");
+            System.out.println(scoreCounter(false,p1Score,p2Score));
         }
         
     }
@@ -108,6 +112,16 @@ public class grid {
         }else{
         return false;
         }
+    }
+
+    static String scoreCounter(boolean player,int p1Score,int p2Score){
+        if (player){
+            p1Score++;
+        }else{
+            p2Score++;
+        }
+
+        return "Player 1's score is: "+p1Score+"\nPlayer 2's score is: "+p2Score;
     }
 
 }
