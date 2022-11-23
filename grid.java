@@ -1,3 +1,5 @@
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.Scanner;
 public class grid {
 
@@ -44,13 +46,25 @@ public class grid {
 
     }
     static boolean makeMove(boolean turn, String[][] arr){
-        java.util.Scanner in = new Scanner(System.in);
+        Dictionary<String,Integer> codes = new Hashtable<String,Integer>();
+        codes.put("A",0);
+        codes.put("B",1);
+        codes.put("C",2);
+        codes.put("1",0);
+        codes.put("2",1);
+        codes.put("3",2);
+
+        System.out.println("Select a square");
+        Scanner in = new Scanner(System.in);
         updateGrid(arr);
-        System.out.println("Select a row");
-        int row = in.nextInt();
-        System.out.println("Select a column");
-        int column = in.nextInt();
-        turn = insert(row,column,turn,arr);
+        String input = in.nextLine();
+        char row = input.charAt(0);
+        char column = input.charAt(1);
+        String rowString = String.valueOf(row);
+        String columnString = String.valueOf(column);
+        int rowIn = codes.get(rowString); 
+        int columnIn = codes.get(columnString); 
+        turn = insert(rowIn,columnIn,turn,arr);
         return turn;
     }
     static boolean checkWin(String[][] arr,boolean turn){
