@@ -26,7 +26,7 @@ public class grid {
     }
 
     static boolean insert(int x, int y,boolean turn,String[][] arr){
-        if(turn == true){
+        if(turn){
             arr[x][y] = "X";            
         }
         else{
