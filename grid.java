@@ -10,16 +10,15 @@ public class grid {
             }
         }
 
-        while(true){
-            if(checkWin(arr,turn)){
-                if(turn == true){
-                    System.out.println("Player 1 wins");
-                }
-                else{
-                    System.out.println("Player 2 wins");
-                }
-            }
+        while(!checkWin(arr,turn)){
             turn = makeMove(turn,arr);
+        }
+        updateGrid(arr);
+        if(!turn){
+            System.out.println("Player 1 wins");
+        }
+        else{
+            System.out.println("Player 2 wins");
         }
         
     }
