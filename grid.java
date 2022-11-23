@@ -13,30 +13,48 @@ public class grid {
                 arr[i][j] = " ";
             }
         }
+        boolean play = true;
 
+        while(play){
+            arr = resetBoard(arr);
+            
+            while((!checkWin(arr,turn))&&(!checkDraw(arr))) {
+            System.out.println(showTurns(turn)); 
+               turn = makeMove(turn,arr);
+            }
+            updateGrid(arr);
+            if(!checkWin(arr,turn)){
+                System.out.println("The game ended in a draw");
+         }
+            else if(!turn){
+                System.out.println("Player 1 wins");
+                p1Score = scoreCounter(true,p1Score,p2Score)[0];
 
+         }
+         else{
+                System.out.println("Player 2 wins");
+                p2Score = scoreCounter(false,p1Score,p2Score)[1];
+            }
+            System.out.println("Player 1's score is: "+p1Score);
+            System.out.println("Player 2's score is: "+p2Score);
+            System.out.println("Do you want to play again? [y/n]");
+            Scanner in = new Scanner(System.in);
+            String input = in.nextLine();
+            if (input.equals("y")){
+                play = true;
+                turn = !turn;
+            }else{
+                play = false;
+                System.out.println("Final Score:");
+                System.out.println("Player 1's score is: "+p1Score);
+                System.out.println("Player 2's score is: "+p2Score);
+            }
 
-        while((!checkWin(arr,turn))&&(!checkDraw(arr))) {
-        System.out.println(showTurns(turn)); 
-            turn = makeMove(turn,arr);
-        }
-        updateGrid(arr);
-        if(!checkWin(arr,turn)){
-            System.out.println("The game ended in a draw");
-        }
-        else if(!turn){
-            System.out.println("Player 1 wins");
-            System.out.println(scoreCounter(true,p1Score,p2Score));
-        }
-        else{
-            System.out.println("Player 2 wins");
-            System.out.println(scoreCounter(false,p1Score,p2Score));
         }
         
     }
 
     static boolean insert(int x, int y,boolean turn,String[][] arr){
-
         if(turn){
             arr[x][y] = "X";            
         }
@@ -85,9 +103,9 @@ public class grid {
         String columnString = String.valueOf(column);
         int rowIn = codes.get(rowString); 
         int columnIn = codes.get(columnString); 
-        turn = insert(rowIn,columnIn,turn,arr);
-         if (arr[row][column] == " "){
-            turn = insert(row,column,turn,arr);
+        
+        if (arr[rowIn][columnIn] == " "){
+            turn = insert(rowIn,columnIn,turn,arr);
         }else{
             System.out.println("You cannot pick a space already occupied");
         }
@@ -146,14 +164,23 @@ public class grid {
     }
 
 
-    static String scoreCounter(boolean player,int p1Score,int p2Score){
+    static int[] scoreCounter(boolean player,int p1Score,int p2Score){
         if (player){
-            p1Score++;
+            p1Score = p1Score +1;
         }else{
-            p2Score++;
+            p2Score = p2Score +1;
         }
 
-        return "Player 1's score is: "+p1Score+"\nPlayer 2's score is: "+p2Score;
+        return new int[] {p1Score,p2Score};
+    }
+
+    static String[][] resetBoard(String [][] arr){
+        for(int i = 0;i<arr.length;i++){
+            for(int j = 0;j<arr.length;j++){
+                arr[i][j] = " ";
+            }
+        }
+        return arr;
     }
 
 
