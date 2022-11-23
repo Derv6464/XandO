@@ -55,7 +55,6 @@ public class grid {
             turn = insert(row,column,turn,arr);
         }else{
             System.out.println("You cannot pick a space already occupied");
-            makeMove(turn,arr);
         }
         return turn;
     }
