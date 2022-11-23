@@ -14,11 +14,14 @@ public class grid {
             }
         }
 
-        while(!checkWin(arr,turn)){
-            turn = makeMove(turn,arr);
+        while((!checkWin(arr,turn))&&(!checkDraw(arr))) {
+            turn = makeMove(turn,arr,count);
         }
         updateGrid(arr);
-        if(!turn){
+        if(!checkWin(arr,turn)){
+            System.out.println("The game ended in a draw");
+        }
+        else if(!turn){
             System.out.println("Player 1 wins");
             System.out.println(scoreCounter(true,p1Score,p2Score));
         }
@@ -36,6 +39,7 @@ public class grid {
         else{
             arr[x][y] = "O";           
         }
+        count ++;
         turn = !turn;
         return turn;
     }
@@ -50,6 +54,7 @@ public class grid {
        // System.out.println("");
 
     }
+
     static boolean makeMove(boolean turn, String[][] arr){
         Dictionary<String,Integer> codes = new Hashtable<String,Integer>();
         codes.put("A",0);
@@ -70,6 +75,11 @@ public class grid {
         int rowIn = codes.get(rowString); 
         int columnIn = codes.get(columnString); 
         turn = insert(rowIn,columnIn,turn,arr);
+         if (arr[row][column] == " "){
+            turn = insert(row,column,turn,arr,count);
+        }else{
+            System.out.println("You cannot pick a space already occupied");
+        }
         return turn;
     }
     static boolean checkWin(String[][] arr,boolean turn){
@@ -114,6 +124,17 @@ public class grid {
         }
     }
 
+    static boolean checkDraw(String[][] arr){
+        for(int i = 0;i<arr.length;i++){
+            for(int j = 0;j<arr.length;j++){
+                if (arr[i][j] == " "){
+                    return false;
+                }
+            }
+        }return true;
+    }
+
+
     static String scoreCounter(boolean player,int p1Score,int p2Score){
         if (player){
             p1Score++;
@@ -123,5 +144,6 @@ public class grid {
 
         return "Player 1's score is: "+p1Score+"\nPlayer 2's score is: "+p2Score;
     }
+
 
 }
