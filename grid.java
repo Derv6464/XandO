@@ -43,13 +43,18 @@ public class grid {
 
     }
     static boolean makeMove(boolean turn, String[][] arr){
-        java.util.Scanner in = new Scanner(System.in);
+        Scanner in = new Scanner(System.in);
         updateGrid(arr);
         System.out.println("Select a row");
         int row = in.nextInt();
         System.out.println("Select a column");
         int column = in.nextInt();
-        turn = insert(row,column,turn,arr);
+        if (arr[row][column] == " "){
+            turn = insert(row,column,turn,arr);
+        }else{
+            System.out.println("You cannot pick a space already occupied");
+            makeMove(turn,arr);
+        }
         return turn;
     }
     static boolean checkWin(String[][] arr,boolean turn){
