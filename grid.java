@@ -3,6 +3,7 @@ public class grid {
 
     public static void main(String[] args){
         boolean turn = true;
+        int count = 0;
         String[][] arr = new String[3][3];
         for(int i = 0;i<arr.length;i++){
             for(int j = 0;j<arr.length;j++){
@@ -10,26 +11,32 @@ public class grid {
             }
         }
 
-        while(!checkWin(arr,turn)){
-            turn = makeMove(turn,arr);
+        while((!checkWin(arr,turn))&&(!checkDraw(arr))) {
+            turn = makeMove(turn,arr,count);
         }
         updateGrid(arr);
-        if(!turn){
+        if(!checkWin(arr,turn)){
+            System.out.println("The game ended in a draw");
+        }
+        else if(!turn){
             System.out.println("Player 1 wins");
         }
         else{
             System.out.println("Player 2 wins");
-        }
+        }  
+
+        
         
     }
 
-    static boolean insert(int x, int y,boolean turn,String[][] arr){
+    static boolean insert(int x, int y,boolean turn,String[][] arr,int count){
         if(turn == true){
             arr[x][y] = "X";            
         }
         else{
             arr[x][y] = "O";           
         }
+        count ++;
         turn = !turn;
         return turn;
     }
@@ -42,7 +49,7 @@ public class grid {
         System.out.println(" "+ arr[2][0] +" | "+ arr[2][1] +" | "+ arr[2][2] +" ");
 
     }
-    static boolean makeMove(boolean turn, String[][] arr){
+    static boolean makeMove(boolean turn, String[][] arr,int count){
         Scanner in = new Scanner(System.in);
         updateGrid(arr);
         System.out.println("Select a row");
@@ -50,7 +57,7 @@ public class grid {
         System.out.println("Select a column");
         int column = in.nextInt();
         if (arr[row][column] == " "){
-            turn = insert(row,column,turn,arr);
+            turn = insert(row,column,turn,arr,count);
         }else{
             System.out.println("You cannot pick a space already occupied");
         }
@@ -98,5 +105,13 @@ public class grid {
         return false;
         }
     }
-
+    static boolean checkDraw(String[][] arr){
+        for(int i = 0;i<arr.length;i++){
+            for(int j = 0;j<arr.length;j++){
+                if (arr[i][j] == " "){
+                    return false;
+                }
+            }
+        }return true;
+    }
 }
