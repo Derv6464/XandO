@@ -9,7 +9,7 @@ public class grid {
                 arr[i][j] = " ";
             }
         }
-   
+
         while(true){
             if(checkWin(arr,turn)){
                 if(turn == true){
@@ -19,6 +19,7 @@ public class grid {
                     System.out.println("Player 2 wins");
                 }
             }
+            System.out.println(checkWin(arr, turn));
             turn = makeMove(turn,arr);
         }
         
@@ -55,12 +56,15 @@ public class grid {
     }
     static boolean checkWin(String[][] arr,boolean turn){
         String s;
-        if(turn == true){
+        if(!turn){
             s = "X";
         }else{
             s = "O";
         }
-
+        System.out.println(s);
+        System.out.println(checkDiagnol(arr,s));
+        System.out.println(checkHorizontal(arr,s));
+        System.out.println(checkVertical(arr,s));
         if (checkDiagnol(arr, s)||checkHorizontal(arr, s)||checkVertical(arr, s)){
             return true;
         }else{
