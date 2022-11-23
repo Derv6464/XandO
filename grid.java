@@ -9,18 +9,18 @@ public class grid {
                 arr[i][j] = " ";
             }
         }
-        while(true){
-            if(checkWin(arr,turn)){
-                if(turn == true){
-                    System.out.println("Player 1 wins");
-                }
-                else{
-                    System.out.println("Player 2 wins");
-                }
-            }
+
+        while(!checkWin(arr,turn)){
             turn = makeMove(turn,arr);
         }
-
+        updateGrid(arr);
+        if(!turn){
+            System.out.println("Player 1 wins");
+        }
+        else{
+            System.out.println("Player 2 wins");
+        }
+        
     }
 
     static boolean insert(int x, int y,boolean turn,String[][] arr){
@@ -40,7 +40,7 @@ public class grid {
         System.out.println(" "+ arr[1][0] +" | "+ arr[1][1] +" | "+ arr[1][2] +" ");
         System.out.println("------------");
         System.out.println(" "+ arr[2][0] +" | "+ arr[2][1] +" | "+ arr[2][2] +" ");
-       // System.out.println("");
+
     }
     static boolean makeMove(boolean turn, String[][] arr){
         java.util.Scanner in = new Scanner(System.in);
@@ -53,27 +53,45 @@ public class grid {
         return turn;
     }
     static boolean checkWin(String[][] arr,boolean turn){
-        var s = "X";
-        if(turn == true){
+        String s;
+        if(!turn){
             s = "X";
         }else{
             s = "O";
         }
-        for(int i = 0;i<arr.length;i++){
-            for(int j = 0;j<arr.length;j++){
-                if((arr[0][j] == s) && (arr[1][j] == s) && (arr[0][j] == s)){
-                    return true;
-                }else if((arr[i][0] == s) && (arr[i][1] == s) && (arr[i][2] == s)){
-                    return true;
-                }else if((arr[0][0] == s) && (arr[1][1] == s) && (arr[2][2] == s)){
-                    return true;
-                }else if((arr[0][2] == s) && (arr[1][1] == s) && (arr[2][0] == s)){
-                    return true;
-                }
-                else{
-                    return false;
-                }
+
+        if (checkDiagnol(arr, s)||checkHorizontal(arr, s)||checkVertical(arr, s)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    static boolean checkHorizontal(String[][] arr,String s){
+        for(int row = 0;row<arr.length;row++){
+            if((arr[row][0] == s) && (arr[row][1] == s) && (arr[row][2] == s)){
+                return true;
             }
+        }
+        return false;
+    }
+
+    static boolean checkVertical(String[][] arr,String s){
+        for(int column = 0;column<arr.length;column++){
+            if((arr[0][column] == s) && (arr[1][column] == s) && (arr[2][column] == s)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static boolean checkDiagnol(String[][] arr,String s){
+        if((arr[0][0] == s) && (arr[1][1] == s) && (arr[2][2] == s)){
+            return true;
+        }else if((arr[0][2] == s) && (arr[1][1] == s) && (arr[2][0] == s)){
+            return true;
+        }else{
+        return false;
         }
     }
 
