@@ -13,6 +13,7 @@ public class grid {
         }
 
         while(!checkWin(arr,turn)){
+            System.out.println(showTurns(turn)); 
             turn = makeMove(turn,arr);
         }
         updateGrid(arr);
@@ -27,15 +28,24 @@ public class grid {
 
     static boolean insert(int x, int y,boolean turn,String[][] arr){
         if(turn == true){
+             
             arr[x][y] = "X";            
         }
         else{
+            
             arr[x][y] = "O";           
         }
         turn = !turn;
         return turn;
     }
-
+    static String showTurns(boolean turns){
+        if(turns){
+            return "It's your turn player 1 (X)"; 
+        }
+        else{
+            return "It's your turn player 2 (O)"; 
+        }
+    }
     static void updateGrid(String[][] arr){
         System.out.println("A   "+ arr[0][0] +" | "+ arr[0][1] +" | "+ arr[0][2] +" ");
         System.out.println("   ------------");
