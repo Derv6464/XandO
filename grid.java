@@ -18,7 +18,7 @@ public class grid {
 
         while((!checkWin(arr,turn))&&(!checkDraw(arr))) {
         System.out.println(showTurns(turn)); 
-            turn = makeMove(turn,arr,count);
+            turn = makeMove(turn,arr);
         }
         updateGrid(arr);
         if(!checkWin(arr,turn)){
@@ -44,7 +44,6 @@ public class grid {
             
             arr[x][y] = "O";           
         }
-        count ++;
         turn = !turn;
         return turn;
     }
@@ -88,7 +87,7 @@ public class grid {
         int columnIn = codes.get(columnString); 
         turn = insert(rowIn,columnIn,turn,arr);
          if (arr[row][column] == " "){
-            turn = insert(row,column,turn,arr,count);
+            turn = insert(row,column,turn,arr);
         }else{
             System.out.println("You cannot pick a space already occupied");
         }
