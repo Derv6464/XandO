@@ -1,5 +1,3 @@
-import java.util.Dictionary;
-import java.util.Hashtable;
 import java.util.Scanner;
 public class grid {
 
@@ -85,24 +83,32 @@ public class grid {
     }
 
     static boolean makeMove(boolean turn, String[][] arr){
-        Dictionary<String,Integer> codes = new Hashtable<String,Integer>();
-        codes.put("A",0);
-        codes.put("B",1);
-        codes.put("C",2);
-        codes.put("1",0);
-        codes.put("2",1);
-        codes.put("3",2);
-
         System.out.println("Select a square");
         Scanner in = new Scanner(System.in);
         updateGrid(arr);
         String input = in.nextLine();
+
+        while (input.length() > 2){
+            System.out.println("Your input is not valid, only enter two characters");
+            System.out.println("Select a square");
+            input = in.nextLine();
+        }
+        
         char row = input.charAt(0);
         char column = input.charAt(1);
-        String rowString = String.valueOf(row);
-        String columnString = String.valueOf(column);
-        int rowIn = codes.get(rowString); 
-        int columnIn = codes.get(columnString); 
+       // String rowString = String.valueOf(row);
+        //String columnString = String.valueOf(column);
+
+        while (checkInvalid(row, column)){
+            input = in.nextLine();
+            row = input.charAt(0);
+            column = input.charAt(1);
+        }
+        int rowIn = convetToNum(row, column)[0];
+        int columnIn = convetToNum(row, column)[1];
+        System.out.println(rowIn);
+        System.out.println(columnIn);
+
         
         if (arr[rowIn][columnIn] == " "){
             turn = insert(rowIn,columnIn,turn,arr);
@@ -110,6 +116,7 @@ public class grid {
             System.out.println("You cannot pick a space already occupied");
         }
         return turn;
+    
     }
     static boolean checkWin(String[][] arr,boolean turn){
         String s;
@@ -183,5 +190,37 @@ public class grid {
         return arr;
     }
 
+    static int[] convetToNum(char row, char colunm){
+        int rowNum;
+        int colunmNum;
+        if (row =='A' || row == 'a'){
+            rowNum = 0;
+        }else if (row == 'B' || row == 'b'){
+            rowNum = 1;
+        }else   {
+                rowNum = 2;
+        }
+        if (colunm == '1' ){
+            colunmNum = 0;
+        }else if (colunm == '2'){
+            colunmNum = 1;
+        }else {
+                colunmNum = 2;
+        }
 
+        return new int[] {rowNum,colunmNum};
+    
+    
+    }
+    static boolean checkInvalid(char row,char column){
+        if (row != 'A' && row != 'B' && row != 'C' && row != 'a' && row != 'b' && row != 'c'){
+            System.out.println("Invalid Entry");
+            return true;
+        }
+        if (column != '1' && column != '2' && column != '3'){
+            System.out.println("Invalid Entry");
+            return true;
+        }  
+        return false;
+    }
 }
