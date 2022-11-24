@@ -1,3 +1,5 @@
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.Scanner;
 public class grid {
 
@@ -45,13 +47,38 @@ public class grid {
 
     }
     static boolean makeMove(boolean turn, String[][] arr){
-        java.util.Scanner in = new Scanner(System.in);
+        Dictionary<String,Integer> codes = new Hashtable<String,Integer>();
+        codes.put("A",0);
+        codes.put("B",1);
+        codes.put("C",2);
+        codes.put("1",0);
+        codes.put("2",1);
+        codes.put("3",2);
+
+        System.out.println("Select a square:");
+        Scanner in = new Scanner(System.in);
         updateGrid(arr);
-        System.out.println("Select a row");
-        int row = in.nextInt();
-        System.out.println("Select a column");
-        int column = in.nextInt();
-        turn = insert(row,column,turn,arr);
+        String input = in.nextLine();
+        while (input.length() > 2){
+            System.out.println("Your input is not valid, only enter two characters");
+            System.out.println("Select a square");
+            input = in.nextLine();
+        }
+        char row = input.charAt(0);
+        if (row != 'A' && row != 'B' && row != 'C'){
+            System.out.println("Invalid Entry");
+            makeMove(turn, arr);
+        }
+        char column = input.charAt(1);
+        if (column != '1' && column != '2' && column != '3'){
+            System.out.println("Invalid Entry");
+            makeMove(turn, arr);
+        }  
+        String rowString = String.valueOf(row);
+        String columnString = String.valueOf(column);          
+        int rowIn = codes.get(rowString); 
+        int columnIn = codes.get(columnString); 
+        turn = insert(rowIn,columnIn,turn,arr);
         return turn;
     }
     static boolean checkWin(String[][] arr,boolean turn){
@@ -84,16 +111,16 @@ public class grid {
             }
         }
         return false;
-    }
+    }  
 
     static boolean checkDiagnol(String[][] arr,String s){
         if((arr[0][0] == s) && (arr[1][1] == s) && (arr[2][2] == s)){
             return true;
         }else if((arr[0][2] == s) && (arr[1][1] == s) && (arr[2][0] == s)){
             return true;
-        }else{
+        }else
         return false;
         }
     }
 
-}
+
