@@ -1,6 +1,9 @@
 import java.util.Scanner;
-public class grid {
+import java.util.Random;
 
+public class grid {
+    static int rowIn;
+    static int columnIn;
     public static void main(String[] args){
         boolean turn = true;
         int p1Score = 0;
@@ -12,16 +15,25 @@ public class grid {
             }
         }
         boolean play = true;
+        boolean single = false;
 
         while(play){
+            Scanner in = new Scanner(System.in);
+            System.out.println("Do you want to play single player [1] or two player [2]");
+            int input = in.nextInt();
+            if(input == 1){
+                single = true;
+            }
+
             arr = resetBoard(arr);
             
-            while((!checkWin(arr,turn))&&(!checkDraw(arr))) {
-            System.out.println(showTurns(turn)); 
-               turn = makeMove(turn,arr);
+            while((!checkWin(arr,turn,single))&&(!checkDraw(arr))) {
+                System.out.println(showTurns(turn)); 
+                turn = makeMove(turn,arr,single);
+                
             }
             updateGrid(arr);
-            if(!checkWin(arr,turn)){
+            if(!checkWin(arr,turn,single)){
                 System.out.println("The game ended in a draw");
          }
             else if(!turn){
@@ -36,9 +48,8 @@ public class grid {
             System.out.println("Player 1's score is: "+p1Score);
             System.out.println("Player 2's score is: "+p2Score);
             System.out.println("Do you want to play again? [y/n]");
-            Scanner in = new Scanner(System.in);
-            String input = in.nextLine();
-            if (input.equals("y")){
+            String input2 = in.nextLine();
+            if (input2.equals("y")){
                 play = true;
                 turn = !turn;
             }else{
@@ -55,9 +66,7 @@ public class grid {
     static boolean insert(int x, int y,boolean turn,String[][] arr){
         if(turn){
             arr[x][y] = "X";            
-        }
-        else{
-            
+        }else{
             arr[x][y] = "O";           
         }
         turn = !turn;
@@ -82,7 +91,10 @@ public class grid {
 
     }
 
-    static boolean makeMove(boolean turn, String[][] arr){
+    static boolean makeMove(boolean turn, String[][] arr, boolean single){
+        if(single && !turn){
+            turn = singlePlayer(arr, rowIn, columnIn, 0, turn);
+        }else{
         System.out.println("Select a square");
         Scanner in = new Scanner(System.in);
         updateGrid(arr);
@@ -106,8 +118,7 @@ public class grid {
         }
         int rowIn = convetToNum(row, column)[0];
         int columnIn = convetToNum(row, column)[1];
-        System.out.println(rowIn);
-        System.out.println(columnIn);
+    
 
         
         if (arr[rowIn][columnIn] == " "){
@@ -115,10 +126,11 @@ public class grid {
         }else{
             System.out.println("You cannot pick a space already occupied");
         }
+        }
         return turn;
     
     }
-    static boolean checkWin(String[][] arr,boolean turn){
+    static boolean checkWin(String[][] arr,boolean turn, boolean single ){
         String s;
         if(!turn){
             s = "X";
@@ -223,4 +235,40 @@ public class grid {
         }  
         return false;
     }
+
+    static boolean singlePlayer(String[][] arr,int rowIn,int columnIn, int go, boolean turn){
+        Random rand = new Random();
+        int rowOut;
+        int columnOut;
+        if(go == 0){
+            if(arr[1][1] != " "){
+                rowOut = rand.nextInt(3);
+                if(rowOut == 0 || rowOut == 2){
+                    columnOut = 1;
+                }else{
+                    columnOut = rand.nextInt(3);
+                    while(columnOut != 1){
+                        columnOut = rand.nextInt(3);
+                    }
+                turn = insert(rowOut, columnOut, turn, arr);
+                }
+            }else{
+                rowOut = rand.nextInt(3);
+                columnOut = rand.nextInt(3);
+                while(rowIn == rowOut && columnIn == columnOut){
+                    rowOut = rand.nextInt(3);
+                    columnOut = rand.nextInt(3);
+                }
+                if(rowOut == 1){
+                    while(columnOut == 1){
+                        columnOut = rand.nextInt(3);
+                    }
+                }
+                turn = insert(rowOut, columnOut, turn, arr);
+            }
+        }
+        return turn;
+    }
+
+    
 }
