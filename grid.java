@@ -1,9 +1,10 @@
 import java.util.Scanner;
 import java.util.Random;
+public class grid{
 
-public class grid {
     static int rowIn;
     static int columnIn;
+    static int go;
     public static void main(String[] args){
         boolean turn = true;
         int p1Score = 0;
@@ -18,19 +19,19 @@ public class grid {
         boolean single = false;
 
         while(play){
+            go = 0;
             Scanner in = new Scanner(System.in);
             System.out.println("Do you want to play single player [1] or two player [2]");
             int input = in.nextInt();
             if(input == 1){
                 single = true;
             }
-
             arr = resetBoard(arr);
             
             while((!checkWin(arr,turn,single))&&(!checkDraw(arr))) {
                 System.out.println(showTurns(turn)); 
                 turn = makeMove(turn,arr,single);
-                
+                go = go + 1;
             }
             updateGrid(arr);
             if(!checkWin(arr,turn,single)){
@@ -49,7 +50,7 @@ public class grid {
             System.out.println("Player 2's score is: "+p2Score);
             System.out.println("Do you want to play again? [y/n]");
             String input2 = in.nextLine();
-            if (input2.equals("y")){
+            if (input2.equals("n")){
                 play = true;
                 turn = !turn;
             }else{
@@ -93,8 +94,16 @@ public class grid {
 
     static boolean makeMove(boolean turn, String[][] arr, boolean single){
         if(single && !turn){
-            turn = singlePlayer(arr, rowIn, columnIn, 0, turn);
+            turn = singles(arr, rowIn, columnIn, go, turn);
         }else{
+            turn = playerGo(turn, arr);
+        }
+
+        return turn;
+        
+    
+    }
+    static boolean playerGo(boolean turn, String[][] arr){
         System.out.println("Select a square");
         Scanner in = new Scanner(System.in);
         updateGrid(arr);
@@ -108,8 +117,6 @@ public class grid {
         
         char row = input.charAt(0);
         char column = input.charAt(1);
-       // String rowString = String.valueOf(row);
-        //String columnString = String.valueOf(column);
 
         while (checkInvalid(row, column)){
             input = in.nextLine();
@@ -118,17 +125,14 @@ public class grid {
         }
         int rowIn = convetToNum(row, column)[0];
         int columnIn = convetToNum(row, column)[1];
-    
-
         
         if (arr[rowIn][columnIn] == " "){
             turn = insert(rowIn,columnIn,turn,arr);
         }else{
             System.out.println("You cannot pick a space already occupied");
         }
-        }
-        return turn;
     
+        return turn;
     }
     static boolean checkWin(String[][] arr,boolean turn, boolean single ){
         String s;
@@ -143,7 +147,6 @@ public class grid {
             return false;
         }
     }
-
     static boolean checkHorizontal(String[][] arr,String s){
         for(int row = 0;row<arr.length;row++){
             if((arr[row][0] == s) && (arr[row][1] == s) && (arr[row][2] == s)){
@@ -152,7 +155,6 @@ public class grid {
         }
         return false;
     }
-
     static boolean checkVertical(String[][] arr,String s){
         for(int column = 0;column<arr.length;column++){
             if((arr[0][column] == s) && (arr[1][column] == s) && (arr[2][column] == s)){
@@ -161,7 +163,6 @@ public class grid {
         }
         return false;
     }
-
     static boolean checkDiagnol(String[][] arr,String s){
         if((arr[0][0] == s) && (arr[1][1] == s) && (arr[2][2] == s)){
             return true;
@@ -171,7 +172,6 @@ public class grid {
         return false;
         }
     }
-
     static boolean checkDraw(String[][] arr){
         for(int i = 0;i<arr.length;i++){
             for(int j = 0;j<arr.length;j++){
@@ -181,8 +181,6 @@ public class grid {
             }
         }return true;
     }
-
-
     static int[] scoreCounter(boolean player,int p1Score,int p2Score){
         if (player){
             p1Score = p1Score +1;
@@ -192,7 +190,6 @@ public class grid {
 
         return new int[] {p1Score,p2Score};
     }
-
     static String[][] resetBoard(String [][] arr){
         for(int i = 0;i<arr.length;i++){
             for(int j = 0;j<arr.length;j++){
@@ -201,7 +198,6 @@ public class grid {
         }
         return arr;
     }
-
     static int[] convetToNum(char row, char colunm){
         int rowNum;
         int colunmNum;
@@ -236,18 +232,18 @@ public class grid {
         return false;
     }
 
-    static boolean singlePlayer(String[][] arr,int rowIn,int columnIn, int go, boolean turn){
+    static boolean singles(String[][] arr,int rowIn,int columnIn, int go, boolean turn){
         Random rand = new Random();
         int rowOut;
         int columnOut;
-        if(go == 0){
+        if(go < 2){
             if(arr[1][1] != " "){
                 rowOut = rand.nextInt(3);
                 if(rowOut == 0 || rowOut == 2){
                     columnOut = 1;
                 }else{
                     columnOut = rand.nextInt(3);
-                    while(columnOut != 1){
+                    while(columnOut == 1){
                         columnOut = rand.nextInt(3);
                     }
                 turn = insert(rowOut, columnOut, turn, arr);
@@ -266,9 +262,16 @@ public class grid {
                 }
                 turn = insert(rowOut, columnOut, turn, arr);
             }
+        }else {
+            rowOut = rand.nextInt(3);
+                columnOut = rand.nextInt(3);
+                while(rowIn == rowOut && columnIn == columnOut){
+                    rowOut = rand.nextInt(3);
+                    columnOut = rand.nextInt(3);
+                }
+                turn = insert(rowOut, columnOut, turn, arr);
         }
         return turn;
     }
 
-    
 }
