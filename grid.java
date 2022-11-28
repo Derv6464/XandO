@@ -5,6 +5,7 @@ public class grid{
     static int rowIn;
     static int columnIn;
     static int go;
+    static String[][] arrX = new String[3][3];
     public static void main(String[] args){
         boolean turn = true;
         int p1Score = 0;
@@ -12,6 +13,12 @@ public class grid{
         String[][] arr = new String[3][3];
         for(int i = 0;i<arr.length;i++){
             for(int j = 0;j<arr.length;j++){
+                arr[i][j] = " ";
+            }
+        }
+
+        for(int i = 0;i<arrX.length;i++){
+            for(int j = 0;j<arrX.length;j++){
                 arr[i][j] = " ";
             }
         }
@@ -66,7 +73,8 @@ public class grid{
 
     static boolean insert(int x, int y,boolean turn,String[][] arr){
         if(turn){
-            arr[x][y] = "X";            
+            arr[x][y] = "X";      
+            arrX[x][y] = "X";        
         }else{
             arr[x][y] = "O";           
         }
@@ -236,6 +244,7 @@ public class grid{
         Random rand = new Random();
         int rowOut;
         int columnOut;
+        String kms = "X";
         if(go < 2){
             if(arr[1][1] != " "){
                 rowOut = rand.nextInt(3);
@@ -263,14 +272,58 @@ public class grid{
                 turn = insert(rowOut, columnOut, turn, arr);
             }
         }else {
-            rowOut = rand.nextInt(3);
-                columnOut = rand.nextInt(3);
-                while(rowIn == rowOut && columnIn == columnOut){
-                    rowOut = rand.nextInt(3);
-                    columnOut = rand.nextInt(3);
+            rowOut = 0;
+            columnOut =0;
+            for(int row = 0;row < 3;row++){
+                if(arrX[row][0] == "X" && arrX[row][1] == "X"){
+                    rowOut = row;
+                    columnOut = 2;
+                }else if(arrX[row][0] == "X" && arrX[row][2] == "X"){
+                    rowOut = row;
+                    columnOut = 1;
+                }else if(arrX[row][1] == "X" && arrX[row][2] == "X"){
+                    rowOut = row;
+                    columnOut = 0;
                 }
-                turn = insert(rowOut, columnOut, turn, arr);
-        }
+                System.out.println(rowOut + "," + columnOut);
+            }
+            for(int col = 0;col < 3;col++){
+                if(arrX[0][col] == "X" && arrX[1][col] == "X"){
+                    rowOut = 2;
+                    columnOut = col;
+                }else if(arrX[1][col] == "X" && arrX[2][col] == "X"){
+                    rowOut = 0;
+                    columnOut = col;
+                }else if(arrX[0][col] == "X" && arrX[2][col] == "X"){
+                    rowOut = 1;
+                    columnOut = col;
+                }
+            }
+
+            
+            if(arrX[0][0] == "X" && arrX[1][1] == "X"){
+                rowOut = 2;
+                columnOut = 2;
+                System.out.println("worked");
+            }else if(arrX[0][0] != " " && arrX[2][2] != " "){
+                rowOut = 1;
+                columnOut = 1;
+            }else if(arrX[1][1] != " " && arrX[2][2] != " "){
+                rowOut = 0;
+                columnOut = 0;
+            }else if(arrX[0][2] != " " && arrX[1][1] != " "){
+                rowOut = 2;
+                columnOut = 0;
+            }else if(arrX[0][2] != " " && arrX[2][0] != " "){
+                rowOut = 1;
+                columnOut = 1;
+            }else if(arrX[1][1] != " " && arrX[2][0] != " "){
+                rowOut = 0;
+                columnOut = 2;
+            }
+            System.out.println(rowOut + "," + columnOut);
+            turn = insert(rowOut, columnOut, turn, arr);
+        }   
         return turn;
     }
 
