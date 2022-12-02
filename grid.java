@@ -244,7 +244,6 @@ public class grid{
         Random rand = new Random();
         int rowOut;
         int columnOut;
-        String kms = "X";
         if(go < 2){
             if(arr[1][1] != " "){
                 rowOut = rand.nextInt(3);
@@ -270,60 +269,79 @@ public class grid{
                     }
                 }
                 turn = insert(rowOut, columnOut, turn, arr);
+        
             }
-        }else {
+        }else{
             rowOut = 0;
             columnOut =0;
+            //while(arr[rowOut][columnOut] != " "){
             for(int row = 0;row < 3;row++){
-                if(arrX[row][0] == "X" && arrX[row][1] == "X"){
+                if(arrX[row][0] == "X" && arrX[row][1] == "X" && arr[row][2] != "O" && arr[row][2] != "X"){
                     rowOut = row;
                     columnOut = 2;
-                }else if(arrX[row][0] == "X" && arrX[row][2] == "X"){
+                    System.out.println(1);
+                }else if(arrX[row][0] == "X" && arrX[row][2] == "X" && arr[row][1] != "O" && arr[row][1] != "X"){
                     rowOut = row;
                     columnOut = 1;
-                }else if(arrX[row][1] == "X" && arrX[row][2] == "X"){
+                    System.out.println(2);
+                }else if(arrX[row][1] == "X" && arrX[row][2] == "X" && arr[row][0] != "O" && arr[row][0] != "x"){
                     rowOut = row;
                     columnOut = 0;
+                    System.out.println(3);
                 }
                 System.out.println(rowOut + "," + columnOut);
             }
             for(int col = 0;col < 3;col++){
-                if(arrX[0][col] == "X" && arrX[1][col] == "X"){
+                if(arrX[0][col] == "X" && arrX[1][col] == "X" && arr[0][col] != "O" && arr[0][col] != "X"){
                     rowOut = 2;
                     columnOut = col;
-                }else if(arrX[1][col] == "X" && arrX[2][col] == "X"){
+                    System.out.println(4);
+                }else if(arrX[1][col] == "X" && arrX[2][col] == "X" && arr[1][col] != "O" && arr[1][col] != "X"){
                     rowOut = 0;
                     columnOut = col;
-                }else if(arrX[0][col] == "X" && arrX[2][col] == "X"){
+                    System.out.println(5);
+                }else if(arrX[0][col] == "X" && arrX[2][col] == "X" && arr[1][col] != "O" && arr[1][col] != "X"){
                     rowOut = 1;
                     columnOut = col;
+                    System.out.println(6);
                 }
             }
 
             
-            if(arrX[0][0] == "X" && arrX[1][1] == "X"){
+            if(arrX[0][0] == "X" && arrX[1][1] == "X" && arr[2][2] != "O" && arr[2][2] != "X"){
                 rowOut = 2;
                 columnOut = 2;
-                System.out.println("worked");
-            }else if(arrX[0][0] != " " && arrX[2][2] != " "){
+                System.out.println(7);
+            }else if(arrX[0][0] == "X" && arrX[2][2] == "X" && arr[1][1] != "O" && arr[1][1] != "X"){
                 rowOut = 1;
                 columnOut = 1;
-            }else if(arrX[1][1] != " " && arrX[2][2] != " "){
+                System.out.println(8);
+            }else if(arrX[1][1] == "X" && arrX[2][2] == "X" && arr[0][0] != "O" && arr[0][0] != "X"){
                 rowOut = 0;
                 columnOut = 0;
-            }else if(arrX[0][2] != " " && arrX[1][1] != " "){
+                System.out.println(9);
+            }else if(arrX[0][2] == "X" && arrX[1][1] == "X" && arr[2][0] != "O" && arr[2][0] != "X"){
                 rowOut = 2;
                 columnOut = 0;
-            }else if(arrX[0][2] != " " && arrX[2][0] != " "){
+                System.out.println(10);
+            }else if(arrX[0][2] == "X" && arrX[2][0] == "X" && arr[1][1] != "O" && arr[1][1] != "X"){
                 rowOut = 1;
                 columnOut = 1;
-            }else if(arrX[1][1] != " " && arrX[2][0] != " "){
+                System.out.println(11);
+            }else if(arrX[1][1] == "X" && arrX[2][0] == "X" && arr[0][2] != "O" && arr[0][2] != "X"){
                 rowOut = 0;
                 columnOut = 2;
+                System.out.println(12);
             }
-            System.out.println(rowOut + "," + columnOut);
+            //System.out.println(rowOut + "," + columnOut);
             turn = insert(rowOut, columnOut, turn, arr);
+
+
+            
         }   
+    
+    //}
+
         return turn;
     }
 
