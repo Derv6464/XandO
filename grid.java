@@ -56,7 +56,8 @@ public class grid{
             System.out.println("Player 1's score is: "+p1Score);
             System.out.println("Player 2's score is: "+p2Score);
             System.out.println("Do you want to play again? [y/n]");
-            String input2 = in.nextLine();
+            Scanner in2 = new Scanner(System.in);
+            String input2 = in2.nextLine();
             if (input2.equals("n")){
                 play = true;
                 turn = !turn;
@@ -244,6 +245,7 @@ public class grid{
         Random rand = new Random();
         int rowOut;
         int columnOut;
+        System.out.println("go" + go);
         if(go < 2){
             if(arr[1][1] != " "){
                 rowOut = rand.nextInt(3);
@@ -272,8 +274,24 @@ public class grid{
         
             }
         }else{
-            rowOut = 0;
-            columnOut =0;
+            turn = makeBlock(arr,go,turn);
+    
+    //}
+        }
+        return turn;
+    }
+
+    
+
+
+    static boolean makeBlock(String[][] arr, int go, boolean turn){
+            Random rand = new Random();
+            int rowOut = rand.nextInt(3);
+            int columnOut = rand.nextInt(3);
+            while(arr[rowOut][columnIn] != " "){
+                rowOut = rand.nextInt(3);
+                columnOut = rand.nextInt(3);
+            }
             //while(arr[rowOut][columnOut] != " "){
             for(int row = 0;row < 3;row++){
                 if(arrX[row][0] == "X" && arrX[row][1] == "X" && arr[row][2] != "O" && arr[row][2] != "X"){
@@ -337,12 +355,6 @@ public class grid{
             turn = insert(rowOut, columnOut, turn, arr);
 
 
-            
+            return turn; 
         }   
-    
-    //}
-
-        return turn;
-    }
-
 }
