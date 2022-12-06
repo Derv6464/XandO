@@ -36,7 +36,11 @@ public class grid{
             arr = resetBoard(arr);
             
             while((!checkWin(arr,turn,single))&&(!checkDraw(arr))) {
+                System.out.println("from start:");
+                System.out.println(turn);
+                if(!single){
                 System.out.println(showTurns(turn)); 
+                }
                 turn = makeMove(turn,arr,single);
                 go = go + 1;
             }
@@ -97,7 +101,6 @@ public class grid{
         System.out.println("   ------------");
         System.out.println("C   "+ arr[2][0] +" | "+ arr[2][1] +" | "+ arr[2][2] +" ");
         System.out.println("    1   2   3");
-       // System.out.println("");
 
     }
 
@@ -245,7 +248,6 @@ public class grid{
         Random rand = new Random();
         int rowOut;
         int columnOut;
-        System.out.println("go" + go);
         if(go < 3){
             if(arr[1][1] != " "){
                 rowOut = rand.nextInt(3);
@@ -274,12 +276,18 @@ public class grid{
         
             }
         }else{
-            if(makeWin(arr, go, turn)[1]){
-                turn = makeWin(arr, go, turn)[0];
+            System.out.println("turn pre singles:");
+            System.out.println(turn);
+            boolean[] wins = makeWin(arr, go, turn);
+            if(wins[1]){
+                System.out.println("makeWin");
+                turn = wins[0];
             }else{
+                System.out.println("makeBlock");
                 turn = makeBlock(arr,go,turn);
             }
-            
+            System.out.println("turn post singles:");
+            System.out.println(turn);
     
         }
         return turn;
@@ -289,7 +297,6 @@ public class grid{
 
 
     static boolean makeBlock(String[][] arr, int go, boolean turn){
-            System.out.println("makeBlock");
             Random rand = new Random();
             int rowOut = rand.nextInt(3);
             int columnOut = rand.nextInt(3);
@@ -301,30 +308,24 @@ public class grid{
                 if(arrX[row][0] == "X" && arrX[row][1] == "X" && arr[row][2] != "O" && arr[row][2] != "X"){
                     rowOut = row;
                     columnOut = 2;
-                    System.out.println(1);
                 }else if(arrX[row][0] == "X" && arrX[row][2] == "X" && arr[row][1] != "O" && arr[row][1] != "X"){
                     rowOut = row;
                     columnOut = 1;
-                    System.out.println(2);
                 }else if(arrX[row][1] == "X" && arrX[row][2] == "X" && arr[row][0] != "O" && arr[row][0] != "x"){
                     rowOut = row;
                     columnOut = 0;
-                    System.out.println(3);
                 }
             }
             for(int col = 0;col < 3;col++){
                 if(arrX[0][col] == "X" && arrX[1][col] == "X" && arr[0][col] != "O" && arr[0][col] != "X"){
                     rowOut = 2;
                     columnOut = col;
-                    System.out.println(4);
                 }else if(arrX[1][col] == "X" && arrX[2][col] == "X" && arr[1][col] != "O" && arr[1][col] != "X"){
                     rowOut = 0;
                     columnOut = col;
-                    System.out.println(5);
                 }else if(arrX[0][col] == "X" && arrX[2][col] == "X" && arr[1][col] != "O" && arr[1][col] != "X"){
                     rowOut = 1;
                     columnOut = col;
-                    System.out.println(6);
                 }
             }
 
@@ -332,37 +333,29 @@ public class grid{
             if(arrX[0][0] == "X" && arrX[1][1] == "X" && arr[2][2] != "O" && arr[2][2] != "X"){
                 rowOut = 2;
                 columnOut = 2;
-                System.out.println(7);
             }else if(arrX[0][0] == "X" && arrX[2][2] == "X" && arr[1][1] != "O" && arr[1][1] != "X"){
                 rowOut = 1;
                 columnOut = 1;
-                System.out.println(8);
             }else if(arrX[1][1] == "X" && arrX[2][2] == "X" && arr[0][0] != "O" && arr[0][0] != "X"){
                 rowOut = 0;
                 columnOut = 0;
-                System.out.println(9);
             }else if(arrX[0][2] == "X" && arrX[1][1] == "X" && arr[2][0] != "O" && arr[2][0] != "X"){
                 rowOut = 2;
                 columnOut = 0;
-                System.out.println(10);
             }else if(arrX[0][2] == "X" && arrX[2][0] == "X" && arr[1][1] != "O" && arr[1][1] != "X"){
                 rowOut = 1;
                 columnOut = 1;
-                System.out.println(11);
             }else if(arrX[1][1] == "X" && arrX[2][0] == "X" && arr[0][2] != "O" && arr[0][2] != "X"){
                 rowOut = 0;
                 columnOut = 2;
-                System.out.println(12);
             }
-            //System.out.println(rowOut + "," + columnOut);
             turn = insert(rowOut, columnOut, turn, arr);
-
+            
 
             return turn; 
         }   
     
         static boolean[] makeWin(String[][] arr, int go, boolean turn){
-            System.out.println("makeWin");
             Random rand = new Random();
             int rowOut = rand.nextInt(3);
             int columnOut = rand.nextInt(3);
@@ -372,17 +365,17 @@ public class grid{
                     rowOut = row;
                     columnOut = 2;
                     win = true;
-                    System.out.println(1);
+
                 }else if(arr[row][0] == "O" && arr[row][2] == "O" && arr[row][1] != "O" && arr[row][1] != "X"){
                     rowOut = row;
                     columnOut = 1;
                     win = true;
-                    System.out.println(2);
+
                 }else if(arr[row][1] == "O" && arr[row][2] == "O" && arr[row][0] != "O" && arr[row][0] != "x"){
                     rowOut = row;
                     columnOut = 0;
                     win = true;
-                    System.out.println(3);
+
                 }
             }
             for(int col = 0;col < 3;col++){
@@ -390,17 +383,17 @@ public class grid{
                     rowOut = 2;
                     columnOut = col;
                     win = true;
-                    System.out.println(4);
+
                 }else if(arr[1][col] == "O" && arr[2][col] == "O" && arr[1][col] != "O" && arr[1][col] != "X"){
                     rowOut = 0;
                     columnOut = col;
                     win = true;
-                    System.out.println(5);
+
                 }else if(arr[0][col] == "O" && arr[2][col] == "O" && arr[1][col] != "O" && arr[1][col] != "X"){
                     rowOut = 1;
                     columnOut = col;
                     win = true;
-                    System.out.println(6);
+
                 }
             }
 
@@ -409,36 +402,32 @@ public class grid{
                 rowOut = 2;
                 columnOut = 2;
                 win = true;
-                System.out.println(7);
             }else if(arr[0][0] == "O" && arr[2][2] == "O" && arr[1][1] != "O" && arr[1][1] != "X"){
                 rowOut = 1;
                 columnOut = 1;
                 win = true;
-                System.out.println(8);
             }else if(arr[1][1] == "O" && arr[2][2] == "O" && arr[0][0] != "O" && arr[0][0] != "X"){
                 rowOut = 0;
                 columnOut = 0;
                 win = true;
-                System.out.println(9);
             }else if(arr[0][2] == "O" && arr[1][1] == "O" && arr[2][0] != "O" && arr[2][0] != "X"){
                 rowOut = 2;
                 columnOut = 0;
                 win = true;
-                System.out.println(10);
             }else if(arr[0][2] == "O" && arr[2][0] == "O" && arr[1][1] != "O" && arr[1][1] != "X"){
                 rowOut = 1;
                 columnOut = 1;
-                System.out.println(11);
+                win = true;
             }else if(arr[1][1] == "O" && arr[2][0] == "O" && arr[0][2] != "O" && arr[0][2] != "X"){
                 rowOut = 0;
                 columnOut = 2;
                 win = true;
-                System.out.println(12);
             }
             if(win){
                 turn = insert(rowOut, columnOut, turn, arr);
+                System.out.println("turn from makeWin");
+                System.out.println(turn);
             }
-            System.out.println(win);
             return new boolean[] {turn,win};
         }
 }
