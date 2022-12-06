@@ -1,6 +1,11 @@
 import java.util.Scanner;
-public class grid {
+import java.util.Random;
+public class grid{
 
+    static int rowIn;
+    static int columnIn;
+    static int go;
+    static String[][] arrX = new String[3][3];
     public static void main(String[] args){
         boolean turn = true;
         int p1Score = 0;
@@ -11,17 +16,36 @@ public class grid {
                 arr[i][j] = " ";
             }
         }
+
+        for(int i = 0;i<arrX.length;i++){
+            for(int j = 0;j<arrX.length;j++){
+                arr[i][j] = " ";
+            }
+        }
         boolean play = true;
+        boolean single = false;
 
         while(play){
+            go = 0;
+            Scanner in = new Scanner(System.in);
+            System.out.println("Do you want to play single player [1] or two player [2]");
+            int input = in.nextInt();
+            if(input == 1){
+                single = true;
+            }
             arr = resetBoard(arr);
             
-            while((!checkWin(arr,turn))&&(!checkDraw(arr))) {
-            System.out.println(showTurns(turn)); 
-               turn = makeMove(turn,arr);
+            while((!checkWin(arr,turn,single))&&(!checkDraw(arr))) {
+                System.out.println("from start:");
+                System.out.println(turn);
+                if(!single){
+                System.out.println(showTurns(turn)); 
+                }
+                turn = makeMove(turn,arr,single);
+                go = go + 1;
             }
             updateGrid(arr);
-            if(!checkWin(arr,turn)){
+            if(!checkWin(arr,turn,single)){
                 System.out.println("The game ended in a draw");
          }
             else if(!turn){
@@ -36,9 +60,9 @@ public class grid {
             System.out.println("Player 1's score is: "+p1Score);
             System.out.println("Player 2's score is: "+p2Score);
             System.out.println("Do you want to play again? [y/n]");
-            Scanner in = new Scanner(System.in);
-            String input = in.nextLine();
-            if (input.equals("y")){
+            Scanner in2 = new Scanner(System.in);
+            String input2 = in2.nextLine();
+            if (input2.equals("y")){
                 play = true;
                 turn = !turn;
             }else{
@@ -54,10 +78,9 @@ public class grid {
 
     static boolean insert(int x, int y,boolean turn,String[][] arr){
         if(turn){
-            arr[x][y] = "X";            
-        }
-        else{
-            
+            arr[x][y] = "X";      
+            arrX[x][y] = "X";        
+        }else{
             arr[x][y] = "O";           
         }
         turn = !turn;
@@ -78,17 +101,27 @@ public class grid {
         System.out.println("   ------------");
         System.out.println("C   "+ arr[2][0] +" | "+ arr[2][1] +" | "+ arr[2][2] +" ");
         System.out.println("    1   2   3");
-       // System.out.println("");
 
     }
 
-    static boolean makeMove(boolean turn, String[][] arr){
+    static boolean makeMove(boolean turn, String[][] arr, boolean single){
+        if(single && !turn){
+            turn = singles(arr, rowIn, columnIn, go, turn);
+        }else{
+            turn = playerGo(turn, arr);
+        }
+
+        return turn;
+        
+    
+    }
+    static boolean playerGo(boolean turn, String[][] arr){
         System.out.println("Select a square");
         Scanner in = new Scanner(System.in);
         updateGrid(arr);
         String input = in.nextLine();
 
-        while (input.length() > 2){
+        while (input.length() > 2 || input.length() < 2){
             System.out.println("Your input is not valid, only enter two characters");
             System.out.println("Select a square");
             input = in.nextLine();
@@ -96,8 +129,6 @@ public class grid {
         
         char row = input.charAt(0);
         char column = input.charAt(1);
-       // String rowString = String.valueOf(row);
-        //String columnString = String.valueOf(column);
 
         while (checkInvalid(row, column)){
             input = in.nextLine();
@@ -106,19 +137,16 @@ public class grid {
         }
         int rowIn = convetToNum(row, column)[0];
         int columnIn = convetToNum(row, column)[1];
-        System.out.println(rowIn);
-        System.out.println(columnIn);
-
         
         if (arr[rowIn][columnIn] == " "){
             turn = insert(rowIn,columnIn,turn,arr);
         }else{
             System.out.println("You cannot pick a space already occupied");
         }
-        return turn;
     
+        return turn;
     }
-    static boolean checkWin(String[][] arr,boolean turn){
+    static boolean checkWin(String[][] arr,boolean turn, boolean single ){
         String s;
         if(!turn){
             s = "X";
@@ -131,7 +159,6 @@ public class grid {
             return false;
         }
     }
-
     static boolean checkHorizontal(String[][] arr,String s){
         for(int row = 0;row<arr.length;row++){
             if((arr[row][0] == s) && (arr[row][1] == s) && (arr[row][2] == s)){
@@ -140,7 +167,6 @@ public class grid {
         }
         return false;
     }
-
     static boolean checkVertical(String[][] arr,String s){
         for(int column = 0;column<arr.length;column++){
             if((arr[0][column] == s) && (arr[1][column] == s) && (arr[2][column] == s)){
@@ -149,7 +175,6 @@ public class grid {
         }
         return false;
     }
-
     static boolean checkDiagnol(String[][] arr,String s){
         if((arr[0][0] == s) && (arr[1][1] == s) && (arr[2][2] == s)){
             return true;
@@ -159,7 +184,6 @@ public class grid {
         return false;
         }
     }
-
     static boolean checkDraw(String[][] arr){
         for(int i = 0;i<arr.length;i++){
             for(int j = 0;j<arr.length;j++){
@@ -169,8 +193,6 @@ public class grid {
             }
         }return true;
     }
-
-
     static int[] scoreCounter(boolean player,int p1Score,int p2Score){
         if (player){
             p1Score = p1Score +1;
@@ -180,7 +202,6 @@ public class grid {
 
         return new int[] {p1Score,p2Score};
     }
-
     static String[][] resetBoard(String [][] arr){
         for(int i = 0;i<arr.length;i++){
             for(int j = 0;j<arr.length;j++){
@@ -189,7 +210,6 @@ public class grid {
         }
         return arr;
     }
-
     static int[] convetToNum(char row, char colunm){
         int rowNum;
         int colunmNum;
@@ -223,4 +243,191 @@ public class grid {
         }  
         return false;
     }
+
+    static boolean singles(String[][] arr,int rowIn,int columnIn, int go, boolean turn){
+        Random rand = new Random();
+        int rowOut;
+        int columnOut;
+        if(go < 3){
+            if(arr[1][1] != " "){
+                rowOut = rand.nextInt(3);
+                if(rowOut == 0 || rowOut == 2){
+                    columnOut = 1;
+                }else{
+                    columnOut = rand.nextInt(3);
+                    while(columnOut == 1){
+                        columnOut = rand.nextInt(3);
+                    }
+                turn = insert(rowOut, columnOut, turn, arr);
+                }
+            }else{
+                rowOut = rand.nextInt(3);
+                columnOut = rand.nextInt(3);
+                while(rowIn == rowOut && columnIn == columnOut){
+                    rowOut = rand.nextInt(3);
+                    columnOut = rand.nextInt(3);
+                }
+                if(rowOut == 1){
+                    while(columnOut == 1){
+                        columnOut = rand.nextInt(3);
+                    }
+                }
+                turn = insert(rowOut, columnOut, turn, arr);
+        
+            }
+        }else{
+            System.out.println("turn pre singles:");
+            System.out.println(turn);
+            boolean[] wins = makeWin(arr, go, turn);
+            if(wins[1]){
+                System.out.println("makeWin");
+                turn = wins[0];
+            }else{
+                System.out.println("makeBlock");
+                turn = makeBlock(arr,go,turn);
+            }
+            System.out.println("turn post singles:");
+            System.out.println(turn);
+    
+        }
+        return turn;
+    }
+
+    
+
+
+    static boolean makeBlock(String[][] arr, int go, boolean turn){
+            Random rand = new Random();
+            int rowOut = rand.nextInt(3);
+            int columnOut = rand.nextInt(3);
+            while(arr[rowOut][columnIn] != " "){
+                rowOut = rand.nextInt(3);
+                columnOut = rand.nextInt(3);
+            }
+            for(int row = 0;row < 3;row++){
+                if(arrX[row][0] == "X" && arrX[row][1] == "X" && arr[row][2] != "O" && arr[row][2] != "X"){
+                    rowOut = row;
+                    columnOut = 2;
+                }else if(arrX[row][0] == "X" && arrX[row][2] == "X" && arr[row][1] != "O" && arr[row][1] != "X"){
+                    rowOut = row;
+                    columnOut = 1;
+                }else if(arrX[row][1] == "X" && arrX[row][2] == "X" && arr[row][0] != "O" && arr[row][0] != "x"){
+                    rowOut = row;
+                    columnOut = 0;
+                }
+            }
+            for(int col = 0;col < 3;col++){
+                if(arrX[0][col] == "X" && arrX[1][col] == "X" && arr[0][col] != "O" && arr[0][col] != "X"){
+                    rowOut = 2;
+                    columnOut = col;
+                }else if(arrX[1][col] == "X" && arrX[2][col] == "X" && arr[1][col] != "O" && arr[1][col] != "X"){
+                    rowOut = 0;
+                    columnOut = col;
+                }else if(arrX[0][col] == "X" && arrX[2][col] == "X" && arr[1][col] != "O" && arr[1][col] != "X"){
+                    rowOut = 1;
+                    columnOut = col;
+                }
+            }
+
+            
+            if(arrX[0][0] == "X" && arrX[1][1] == "X" && arr[2][2] != "O" && arr[2][2] != "X"){
+                rowOut = 2;
+                columnOut = 2;
+            }else if(arrX[0][0] == "X" && arrX[2][2] == "X" && arr[1][1] != "O" && arr[1][1] != "X"){
+                rowOut = 1;
+                columnOut = 1;
+            }else if(arrX[1][1] == "X" && arrX[2][2] == "X" && arr[0][0] != "O" && arr[0][0] != "X"){
+                rowOut = 0;
+                columnOut = 0;
+            }else if(arrX[0][2] == "X" && arrX[1][1] == "X" && arr[2][0] != "O" && arr[2][0] != "X"){
+                rowOut = 2;
+                columnOut = 0;
+            }else if(arrX[0][2] == "X" && arrX[2][0] == "X" && arr[1][1] != "O" && arr[1][1] != "X"){
+                rowOut = 1;
+                columnOut = 1;
+            }else if(arrX[1][1] == "X" && arrX[2][0] == "X" && arr[0][2] != "O" && arr[0][2] != "X"){
+                rowOut = 0;
+                columnOut = 2;
+            }
+            turn = insert(rowOut, columnOut, turn, arr);
+            
+
+            return turn; 
+        }   
+    
+        static boolean[] makeWin(String[][] arr, int go, boolean turn){
+            Random rand = new Random();
+            int rowOut = rand.nextInt(3);
+            int columnOut = rand.nextInt(3);
+            boolean win = false;
+            for(int row = 0;row < 3;row++){
+                if(arr[row][0] == "O" && arr[row][1] == "O" && arr[row][2] != "O" && arr[row][2] != "X"){
+                    rowOut = row;
+                    columnOut = 2;
+                    win = true;
+
+                }else if(arr[row][0] == "O" && arr[row][2] == "O" && arr[row][1] != "O" && arr[row][1] != "X"){
+                    rowOut = row;
+                    columnOut = 1;
+                    win = true;
+
+                }else if(arr[row][1] == "O" && arr[row][2] == "O" && arr[row][0] != "O" && arr[row][0] != "x"){
+                    rowOut = row;
+                    columnOut = 0;
+                    win = true;
+
+                }
+            }
+            for(int col = 0;col < 3;col++){
+                if(arr[0][col] == "O" && arr[1][col] == "O" && arr[0][col] != "O" && arr[0][col] != "X"){
+                    rowOut = 2;
+                    columnOut = col;
+                    win = true;
+
+                }else if(arr[1][col] == "O" && arr[2][col] == "O" && arr[1][col] != "O" && arr[1][col] != "X"){
+                    rowOut = 0;
+                    columnOut = col;
+                    win = true;
+
+                }else if(arr[0][col] == "O" && arr[2][col] == "O" && arr[1][col] != "O" && arr[1][col] != "X"){
+                    rowOut = 1;
+                    columnOut = col;
+                    win = true;
+
+                }
+            }
+
+            
+            if(arr[0][0] == "O" && arr[1][1] == "O" && arr[2][2] != "O" && arr[2][2] != "X"){
+                rowOut = 2;
+                columnOut = 2;
+                win = true;
+            }else if(arr[0][0] == "O" && arr[2][2] == "O" && arr[1][1] != "O" && arr[1][1] != "X"){
+                rowOut = 1;
+                columnOut = 1;
+                win = true;
+            }else if(arr[1][1] == "O" && arr[2][2] == "O" && arr[0][0] != "O" && arr[0][0] != "X"){
+                rowOut = 0;
+                columnOut = 0;
+                win = true;
+            }else if(arr[0][2] == "O" && arr[1][1] == "O" && arr[2][0] != "O" && arr[2][0] != "X"){
+                rowOut = 2;
+                columnOut = 0;
+                win = true;
+            }else if(arr[0][2] == "O" && arr[2][0] == "O" && arr[1][1] != "O" && arr[1][1] != "X"){
+                rowOut = 1;
+                columnOut = 1;
+                win = true;
+            }else if(arr[1][1] == "O" && arr[2][0] == "O" && arr[0][2] != "O" && arr[0][2] != "X"){
+                rowOut = 0;
+                columnOut = 2;
+                win = true;
+            }
+            if(win){
+                turn = insert(rowOut, columnOut, turn, arr);
+                System.out.println("turn from makeWin");
+                System.out.println(turn);
+            }
+            return new boolean[] {turn,win};
+        }
 }
